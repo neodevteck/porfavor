@@ -1,7 +1,8 @@
 import React,{useContext} from "react";
 import GlobalContext from "../Context/GlobalContext";
+import ReactTooltip from 'react-tooltip';
 
-function Hora({hora,jornada,eventos}) {
+function Hora({hora,jornada,eventos,idUsuDia}) {
     const {
         idUsuario       
       } = useContext(GlobalContext); 
@@ -23,21 +24,37 @@ function Hora({hora,jornada,eventos}) {
   return (
     // <div>{hora } {jornada}</div>
     
-    <div className="border border-gray-200 flex flex-col ">
+    <div className=" border border-gray-200 flex flex-col ">
       <div>{hora } {jornada}</div>
       <div
         className="flex-1 cursor-pointer"       
       >
         {eventos.map((evt, idx) => (      
           
-          <div         
+          <div     
+              data-for="custom-color"
+              data-tip={evt.ASUNTO_FLUJOTRABAJO }
             key={idx}
             // onClick={() => (window.open('../../FlujodeTrabajo/Formularios/frmCrearActividades.aspx?Formulario=frmCreaActividades&ID='+ evt.FLUJOTRABAJOID_FLUJOTRABAJO, '_blank'))}
             onClick={() => (window.location.href = `../../FlujodeTrabajo/Formularios/frmCrearActividades.aspx?Formulario=frmCreaActividades&ID=${evt.FLUJOTRABAJOID_FLUJOTRABAJO}` , '_blank')}
             
-            className={`${ObtenerClaseColor(evt)} p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate`}
-          >
-              {evt.FLUJOTRABAJOID_FLUJOTRABAJO.toLocaleString()} - {evt.ASUNTO_FLUJOTRABAJO}
+            className={`${ObtenerClaseColor(evt)} p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate border-2 border-white-500 w-80 `}
+            style={{zIndex:idx,position:"absolute",left:350 + idx*20,height:(idx+1) * 80}}
+            
+          >       
+           <ReactTooltip
+                  id="custom-color"
+                  className="custom-color"
+                  place="right"
+                  border
+                  textColor="#5F4B8BFF"
+                  backgroundColor="#E69A8DFF"
+                  borderColor="darkgreen"
+                  arrowColor="red"
+                />
+              { evt.FLUJOTRABAJOID_FLUJOTRABAJO.toLocaleString()} - {
+              
+              }
           </div>
          
         ))}

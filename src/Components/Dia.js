@@ -238,15 +238,15 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
           <Hora
             hora={hora.hora}
             jornada={hora.jornada}
+            idUsuDia={idUsuDia}
             eventos={
               dayEvents
-                ? dayEvents.filter((x) => {
-                    
+                ? dayEvents.filter((x) => {                    
                     if (
                       x.HORACALINI_FLUJOTRABAJO != undefined &&
                       x.HORACALINI_FLUJOTRABAJO != null &&
                       x.HORACALFIN_FLUJOTRABAJO != undefined &&
-                      x.HORACALFIN_FLUJOTRABAJO != null &&
+                      x.HORACALFIN_FLUJOTRABAJO != null &&                      
                       (x.HORACALINI_FLUJOTRABAJO.Hours === hora.horam ||
                         x.HORACALFIN_FLUJOTRABAJO.Hours === hora.horam) &&
                       x.TERCERECURSOCTROLID_FLUJOTRABAJO === idUsuDia
