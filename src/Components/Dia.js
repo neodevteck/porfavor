@@ -234,16 +234,14 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
   ) : (
     <div className='flex-1 grid grid-cols-1 grid-rows-24'>
       <React.Fragment>
-        {arrHoras.map((hora, idx) => (
+        {arrHoras.map((hora) => (
           <Hora
             hora={hora.hora}
             jornada={hora.jornada}
             eventos={
               dayEvents
                 ? dayEvents.filter((x) => {
-                    {
-                      console.log(idUsuDia);
-                    }
+                    
                     if (
                       x.HORACALINI_FLUJOTRABAJO != undefined &&
                       x.HORACALINI_FLUJOTRABAJO != null &&
@@ -273,6 +271,8 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
                       x.HORACALFIN3_FLUJOTRABAJO != null &&
                       (x.HORACALINI3_FLUJOTRABAJO.Hours === hora.horam ||
                         x.HORACALFIN3_FLUJOTRABAJO.Hours === hora.horam)
+                        &&
+                      x.TERCERECURSOCTROL3ID_FLUJOTRABAJO === idUsuDia
                     ) {
                       return true;
                     }
@@ -282,7 +282,8 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
                       x.HORACALFIN4_FLUJOTRABAJO != undefined &&
                       x.HORACALFIN4_FLUJOTRABAJO != null &&
                       (x.HORACALINI4_FLUJOTRABAJO.Hours === hora.horam ||
-                        x.HORACALFIN4_FLUJOTRABAJO.Hours === hora.horam)
+                        x.HORACALFIN4_FLUJOTRABAJO.Hours === hora.horam)&&
+                        x.TERCERECURSOCTROL4ID_FLUJOTRABAJO === idUsuDia
                     ) {
                       return true;
                     }
