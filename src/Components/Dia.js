@@ -3,7 +3,8 @@ import dayjs from 'dayjs';
 import GlobalContext from '../Context/GlobalContext';
 import { timeConvert } from '../Util/Util';
 import Hora from './Hora';
-import Usuarios from './Usuarios';
+import axios from 'axios'
+import {getMonth} from '../Util/Util'
 
 let arrHoras = [
   { hora: 1, jornada: 'am', horam: 1 },
@@ -32,7 +33,7 @@ let arrHoras = [
 ];
 
 export default function Dia({ day, rowIdx, idUsuDia }) {
-  console.log('EL PROBLEMA: ' + idUsuDia);
+  //console.log('EL PROBLEMA: ' + idUsuDia);
   //console.log(usuarios);
   //let arrHoras = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
 
@@ -45,10 +46,12 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
     filtrarActividades,
     colores,
     usuarios,
+    monthIndex,
+    arrIds
   } = useContext(GlobalContext);
-  console.log(usuarios);
+  //console.log(usuarios);
   useEffect(() => {
-    //console.log(filtrarActividades)
+    console.log(filtrarActividades)
 
     // const events =
     // ActividadesMes?
@@ -56,19 +59,19 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
     //   (x) =>
     //   {
     //     if (contador < 4) {
-    //     if ((x.FECHACALINI_FLUJOTRABAJO != undefined) && (x.FECHACALINI_FLUJOTRABAJO != null) && (x.FECHACALFIN_FLUJOTRABAJO != undefined) && (x.FECHACALFIN_FLUJOTRABAJO != null) && ((dayjs(timeConvert(x.FECHACALINI_FLUJOTRABAJO)).format("DD-MM-YY")  === day.format("DD-MM-YY")) || (dayjs(timeConvert(x.FECHACALFIN_FLUJOTRABAJO)).format("DD-MM-YY")  === day.format("DD-MM-YY")))){
+    //     if ((x.FECHACALINI != undefined) && (x.FECHACALINI != null) && (x.FECHACALFIN != undefined) && (x.FECHACALFIN != null) && ((dayjs(timeConvert(x.FECHACALINI)).format("DD-MM-YY")  === day.format("DD-MM-YY")) || (dayjs(timeConvert(x.FECHACALFIN)).format("DD-MM-YY")  === day.format("DD-MM-YY")))){
     //       contador++
     //       return true
     //      }
-    //      if ((x.FECHACALINI2_FLUJOTRABAJO != undefined) && (x.FECHACALINI2_FLUJOTRABAJO != null) && (x.FECHACALFIN2_FLUJOTRABAJO != undefined) && (x.FECHACALFIN2_FLUJOTRABAJO != null) && ((dayjs(timeConvert(x.FECHACALINI2_FLUJOTRABAJO)).format("DD-MM-YY")  === day.format("DD-MM-YY")) || (dayjs(timeConvert(x.FECHACALFIN2_FLUJOTRABAJO)).format("DD-MM-YY")  === day.format("DD-MM-YY")))){
+    //      if ((x.FECHACALINI2 != undefined) && (x.FECHACALINI2 != null) && (x.FECHACALFIN2 != undefined) && (x.FECHACALFIN2 != null) && ((dayjs(timeConvert(x.FECHACALINI2)).format("DD-MM-YY")  === day.format("DD-MM-YY")) || (dayjs(timeConvert(x.FECHACALFIN2)).format("DD-MM-YY")  === day.format("DD-MM-YY")))){
     //       contador++
     //       return true
     //      }
-    //      if ((x.FECHACALINI3_FLUJOTRABAJO != undefined) && (x.FECHACALINI3_FLUJOTRABAJO != null) && (x.FECHACALFIN3_FLUJOTRABAJO != undefined) && (x.FECHACALFIN3_FLUJOTRABAJO != null) && ((dayjs(timeConvert(x.FECHACALINI3_FLUJOTRABAJO)).format("DD-MM-YY")  === day.format("DD-MM-YY")) || (dayjs(timeConvert(x.FECHACALFIN3_FLUJOTRABAJO)).format("DD-MM-YY")  === day.format("DD-MM-YY")))){
+    //      if ((x.FECHACALINI3 != undefined) && (x.FECHACALINI3 != null) && (x.FECHACALFIN3 != undefined) && (x.FECHACALFIN3 != null) && ((dayjs(timeConvert(x.FECHACALINI3)).format("DD-MM-YY")  === day.format("DD-MM-YY")) || (dayjs(timeConvert(x.FECHACALFIN3)).format("DD-MM-YY")  === day.format("DD-MM-YY")))){
     //       contador++
     //       return true
     //      }
-    //      if ((x.FECHACALINI4_FLUJOTRABAJO != undefined) && (x.FECHACALINI4_FLUJOTRABAJO != null) && (x.FECHACALFIN4_FLUJOTRABAJO != undefined) && (x.FECHACALFIN4_FLUJOTRABAJO != null) && ((dayjs(timeConvert(x.FECHACALINI4_FLUJOTRABAJO)).format("DD-MM-YY")  === day.format("DD-MM-YY")) || (dayjs(timeConvert(x.FECHACALFIN4_FLUJOTRABAJO)).format("DD-MM-YY")  === day.format("DD-MM-YY")))){
+    //      if ((x.FECHACALINI4 != undefined) && (x.FECHACALINI4 != null) && (x.FECHACALFIN4 != undefined) && (x.FECHACALFIN4 != null) && ((dayjs(timeConvert(x.FECHACALINI4)).format("DD-MM-YY")  === day.format("DD-MM-YY")) || (dayjs(timeConvert(x.FECHACALFIN4)).format("DD-MM-YY")  === day.format("DD-MM-YY")))){
     //       contador++
     //       return true
     //      }}
@@ -79,75 +82,77 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
 
     let events = [];
     let contador = 0;
-    for (let i = 0; i < filtrarActividades.length; i++) {
-      if (
-        filtrarActividades[i].FECHACALINI_FLUJOTRABAJO != undefined &&
-        filtrarActividades[i].FECHACALINI_FLUJOTRABAJO != null &&
-        filtrarActividades[i].FECHACALFIN_FLUJOTRABAJO != undefined &&
-        filtrarActividades[i].FECHACALFIN_FLUJOTRABAJO != null &&
-        (dayjs(
-          timeConvert(filtrarActividades[i].FECHACALINI_FLUJOTRABAJO)
-        ).format('DD-MM-YY') === day.format('DD-MM-YY') ||
-          dayjs(
-            timeConvert(filtrarActividades[i].FECHACALFIN_FLUJOTRABAJO)
-          ).format('DD-MM-YY') === day.format('DD-MM-YY'))
-      ) {
-        events.push(filtrarActividades[i]);
-        contador++;
-        //return true
+    
+      for (let i = 0; i < filtrarActividades.length; i++) {
+        if (
+          filtrarActividades[i].FECHACALINI != undefined &&
+          filtrarActividades[i].FECHACALINI != null &&
+          filtrarActividades[i].FECHACALFIN != undefined &&
+          filtrarActividades[i].FECHACALFIN != null &&
+          (dayjs(
+            timeConvert(filtrarActividades[i].FECHACALINI)
+          ).format('DD-MM-YY') === day.format('DD-MM-YY') ||
+            dayjs(
+              timeConvert(filtrarActividades[i].FECHACALFIN)
+            ).format('DD-MM-YY') === day.format('DD-MM-YY'))
+        ) {
+          events.push(filtrarActividades[i]);
+          contador++;
+          //return true
+        }
+        if (
+          filtrarActividades[i].FECHACALINI2 != undefined &&
+          filtrarActividades[i].FECHACALINI2 != null &&
+          filtrarActividades[i].FECHACALFIN2 != undefined &&
+          filtrarActividades[i].FECHACALFIN2 != null &&
+          (dayjs(
+            timeConvert(filtrarActividades[i].FECHACALINI2)
+          ).format('DD-MM-YY') === day.format('DD-MM-YY') ||
+            dayjs(
+              timeConvert(filtrarActividades[i].FECHACALFIN2)
+            ).format('DD-MM-YY') === day.format('DD-MM-YY'))
+        ) {
+          events.push(filtrarActividades[i]);
+          contador++;
+          //return true
+        }
+        if (
+          filtrarActividades[i].FECHACALINI3 != undefined &&
+          filtrarActividades[i].FECHACALINI3 != null &&
+          filtrarActividades[i].FECHACALFIN3 != undefined &&
+          filtrarActividades[i].FECHACALFIN3 != null &&
+          (dayjs(
+            timeConvert(filtrarActividades[i].FECHACALINI3)
+          ).format('DD-MM-YY') === day.format('DD-MM-YY') ||
+            dayjs(
+              timeConvert(filtrarActividades[i].FECHACALFIN3)
+            ).format('DD-MM-YY') === day.format('DD-MM-YY'))
+        ) {
+          events.push(filtrarActividades[i]);
+          contador++;
+          //return true
+        }
+        if (
+          filtrarActividades[i].FECHACALINI4 != undefined &&
+          filtrarActividades[i].FECHACALINI4 != null &&
+          filtrarActividades[i].FECHACALFIN4 != undefined &&
+          filtrarActividades[i].FECHACALFIN4 != null &&
+          (dayjs(
+            timeConvert(filtrarActividades[i].FECHACALINI4)
+          ).format('DD-MM-YY') === day.format('DD-MM-YY') ||
+            dayjs(
+              timeConvert(filtrarActividades[i].FECHACALFIN4)
+            ).format('DD-MM-YY') === day.format('DD-MM-YY'))
+        ) {
+          events.push(filtrarActividades[i]);
+          contador++;
+          //return true
+        }
+        if (contador > 3) {
+          break;
+        }
       }
-      if (
-        filtrarActividades[i].FECHACALINI2_FLUJOTRABAJO != undefined &&
-        filtrarActividades[i].FECHACALINI2_FLUJOTRABAJO != null &&
-        filtrarActividades[i].FECHACALFIN2_FLUJOTRABAJO != undefined &&
-        filtrarActividades[i].FECHACALFIN2_FLUJOTRABAJO != null &&
-        (dayjs(
-          timeConvert(filtrarActividades[i].FECHACALINI2_FLUJOTRABAJO)
-        ).format('DD-MM-YY') === day.format('DD-MM-YY') ||
-          dayjs(
-            timeConvert(filtrarActividades[i].FECHACALFIN2_FLUJOTRABAJO)
-          ).format('DD-MM-YY') === day.format('DD-MM-YY'))
-      ) {
-        events.push(filtrarActividades[i]);
-        contador++;
-        //return true
-      }
-      if (
-        filtrarActividades[i].FECHACALINI3_FLUJOTRABAJO != undefined &&
-        filtrarActividades[i].FECHACALINI3_FLUJOTRABAJO != null &&
-        filtrarActividades[i].FECHACALFIN3_FLUJOTRABAJO != undefined &&
-        filtrarActividades[i].FECHACALFIN3_FLUJOTRABAJO != null &&
-        (dayjs(
-          timeConvert(filtrarActividades[i].FECHACALINI3_FLUJOTRABAJO)
-        ).format('DD-MM-YY') === day.format('DD-MM-YY') ||
-          dayjs(
-            timeConvert(filtrarActividades[i].FECHACALFIN3_FLUJOTRABAJO)
-          ).format('DD-MM-YY') === day.format('DD-MM-YY'))
-      ) {
-        events.push(filtrarActividades[i]);
-        contador++;
-        //return true
-      }
-      if (
-        filtrarActividades[i].FECHACALINI4_FLUJOTRABAJO != undefined &&
-        filtrarActividades[i].FECHACALINI4_FLUJOTRABAJO != null &&
-        filtrarActividades[i].FECHACALFIN4_FLUJOTRABAJO != undefined &&
-        filtrarActividades[i].FECHACALFIN4_FLUJOTRABAJO != null &&
-        (dayjs(
-          timeConvert(filtrarActividades[i].FECHACALINI4_FLUJOTRABAJO)
-        ).format('DD-MM-YY') === day.format('DD-MM-YY') ||
-          dayjs(
-            timeConvert(filtrarActividades[i].FECHACALFIN4_FLUJOTRABAJO)
-          ).format('DD-MM-YY') === day.format('DD-MM-YY'))
-      ) {
-        events.push(filtrarActividades[i]);
-        contador++;
-        //return true
-      }
-      if (contador > 3) {
-        break;
-      }
-    }
+    
 
     //(contador)
     setDayEvents(events);
@@ -161,16 +166,16 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
 
   function ObtenerClaseColor(evt) {
     let claseColor = 'colorAzul';
-    if (evt.ESTADO_FLUJOTRABAJO === 3) {
+    if (evt.ESTADO === 3) {
       claseColor = 'colorVerde';
     } else if (
-      evt.USUARIOSID_FLUJOTRABAJO != idUsuario &&
-      evt.ESTADO_FLUJOTRABAJO === 1
+      evt.USUARIOSID != idUsuario &&
+      evt.ESTADO === 1
     ) {
       claseColor = 'colorAzulClaro';
     } else if (
-      evt.USUARIOSID_FLUJOTRABAJO === idUsuario &&
-      evt.ESTADO_FLUJOTRABAJO === 1
+      evt.USUARIOSID === idUsuario &&
+      evt.ESTADO === 1
     ) {
       claseColor = 'colorAzul';
     }
@@ -178,13 +183,13 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
   }
 
   function ObtenerColorUsuario(evt) {
-    //console.log(evt.TERCERECURSOCTROLID_FLUJOTRABAJO);
+    //console.log(evt.TERCERECURSOCTROLID);
     for (let i = 0; i < usuarios.length; i++) {
       if (
-        usuarios[i].id === evt.TERCERECURSOCTROLID_FLUJOTRABAJO ||
-        usuarios[i].id === evt.TERCERECURSOCTROL2ID_FLUJOTRABAJO ||
-        usuarios[i].id === evt.TERCERECURSOCTROL3ID_FLUJOTRABAJO ||
-        usuarios[i].id === evt.TERCERECURSOCTROL4ID_FLUJOTRABAJO
+        usuarios[i].id === evt.TERCERECURSOCTROLID ||
+        usuarios[i].id === evt.TERCERECURSOCTROL2ID ||
+        usuarios[i].id === evt.TERCERECURSOCTROL3ID ||
+        usuarios[i].id === evt.TERCERECURSOCTROL4ID
       ) {
         return 'bg-' + colores[usuarios[i].num];
       }
@@ -192,6 +197,7 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
     return '';
   }
 
+  
   return opcionVista == 1 ? (
     <div className='border border-gray-200 flex flex-col '>
       <header className='flex flex-col items-center'>
@@ -211,9 +217,9 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
         {dayEvents.map((evt, idx) => (
           <div
             key={idx}
-            // onClick={() => (window.open('../../FlujodeTrabajo/Formularios/frmCrearActividades.aspx?Formulario=frmCreaActividades&ID='+ evt.FLUJOTRABAJOID_FLUJOTRABAJO, '_blank'))}
+            // onClick={() => (window.open('../../FlujodeTrabajo/Formularios/frmCrearActividades.aspx?Formulario=frmCreaActividades&ID='+ evt.FLUJOTRABAJOID, '_blank'))}
             onClick={() => (
-              (window.location.href = `../../FlujodeTrabajo/Formularios/frmCrearActividades.aspx?Formulario=frmCreaActividades&ID=${evt.FLUJOTRABAJOID_FLUJOTRABAJO}`),
+              (window.location.href = `../../FlujodeTrabajo/Formularios/frmCrearActividades.aspx?Formulario=frmCreaActividades&ID=${evt.FLUJOTRABAJOID}`),
               '_blank'
             )}
             className={`${ObtenerClaseColor(
@@ -225,8 +231,8 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
                 evt
               )} rounded-full inline-block`}
             ></div>
-            {evt.FLUJOTRABAJOID_FLUJOTRABAJO.toLocaleString()} -{' '}
-            {evt.ASUNTO_FLUJOTRABAJO}
+            {evt.FLUJOTRABAJOID.toLocaleString()} -{' '}
+            {evt.ASUNTO}
           </div>
         ))}
       </div>
@@ -234,65 +240,69 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
   ) : (
     <div className='flex-1 grid grid-cols-1 grid-rows-24'>
       <React.Fragment>
-        {arrHoras.map((hora) => (
+        {arrHoras.map((hora) => {
+          //console.log('stuff')         
+          return (
           <Hora
             hora={hora.hora}
             jornada={hora.jornada}
             idUsuDia={idUsuDia}
-            eventos={
+            eventos={  
               dayEvents
-                ? dayEvents.filter((x) => {                    
+                ? dayEvents.filter((x) => {  
                     if (
-                      x.HORACALINI_FLUJOTRABAJO != undefined &&
-                      x.HORACALINI_FLUJOTRABAJO != null &&
-                      x.HORACALFIN_FLUJOTRABAJO != undefined &&
-                      x.HORACALFIN_FLUJOTRABAJO != null &&                      
-                      (x.HORACALINI_FLUJOTRABAJO.Hours === hora.horam ||
-                        x.HORACALFIN_FLUJOTRABAJO.Hours === hora.horam) &&
-                      x.TERCERECURSOCTROLID_FLUJOTRABAJO === idUsuDia
+                      x.HORACALINI != undefined &&
+                      x.HORACALINI != null &&
+                      x.HORACALFIN != undefined &&
+                      x.HORACALFIN != null &&                      
+                      (x.HORACALINI.Hours === hora.horam ||
+                        x.HORACALFIN.Hours === hora.horam) &&
+                      x.TERCERECURSOCTROLID === idUsuDia
                     ) {
                       return true;
                     }
                     if (
-                      x.HORACALINI2_FLUJOTRABAJO != undefined &&
-                      x.HORACALINI2_FLUJOTRABAJO != null &&
-                      x.HORACALFIN2_FLUJOTRABAJO != undefined &&
-                      x.HORACALFIN2_FLUJOTRABAJO != null &&
-                      (x.HORACALINI2_FLUJOTRABAJO.Hours === hora.horam ||
-                        x.HORACALFIN2_FLUJOTRABAJO.Hours === hora.horam) &&
-                      x.TERCERECURSOCTROL2ID_FLUJOTRABAJO === idUsuDia
+                      x.HORACALINI2 != undefined &&
+                      x.HORACALINI2 != null &&
+                      x.HORACALFIN2 != undefined &&
+                      x.HORACALFIN2 != null &&
+                      (x.HORACALINI2.Hours === hora.horam ||
+                        x.HORACALFIN2.Hours === hora.horam) &&
+                      x.TERCERECURSOCTROL2ID === idUsuDia
                     ) {
                       return true;
                     }
                     if (
-                      x.HORACALINI3_FLUJOTRABAJO != undefined &&
-                      x.HORACALINI3_FLUJOTRABAJO != null &&
-                      x.HORACALFIN3_FLUJOTRABAJO != undefined &&
-                      x.HORACALFIN3_FLUJOTRABAJO != null &&
-                      (x.HORACALINI3_FLUJOTRABAJO.Hours === hora.horam ||
-                        x.HORACALFIN3_FLUJOTRABAJO.Hours === hora.horam)
+                      x.HORACALINI3 != undefined &&
+                      x.HORACALINI3 != null &&
+                      x.HORACALFIN3 != undefined &&
+                      x.HORACALFIN3 != null &&
+                      (x.HORACALINI3.Hours === hora.horam ||
+                        x.HORACALFIN3.Hours === hora.horam)
                         &&
-                      x.TERCERECURSOCTROL3ID_FLUJOTRABAJO === idUsuDia
+                      x.TERCERECURSOCTROL3ID === idUsuDia
                     ) {
                       return true;
                     }
                     if (
-                      x.HORACALINI4_FLUJOTRABAJO != undefined &&
-                      x.HORACALINI4_FLUJOTRABAJO != null &&
-                      x.HORACALFIN4_FLUJOTRABAJO != undefined &&
-                      x.HORACALFIN4_FLUJOTRABAJO != null &&
-                      (x.HORACALINI4_FLUJOTRABAJO.Hours === hora.horam ||
-                        x.HORACALFIN4_FLUJOTRABAJO.Hours === hora.horam)&&
-                        x.TERCERECURSOCTROL4ID_FLUJOTRABAJO === idUsuDia
+                      x.HORACALINI4 != undefined &&
+                      x.HORACALINI4 != null &&
+                      x.HORACALFIN4 != undefined &&
+                      x.HORACALFIN4 != null &&
+                      (x.HORACALINI4.Hours === hora.horam ||
+                        x.HORACALFIN4.Hours === hora.horam)&&
+                        x.TERCERECURSOCTROL4ID === idUsuDia
                     ) {
                       return true;
                     }
                     return false;
                   })
                 : []
-            }
+      
+              }
           />
-        ))}
+        )
+        })}
       </React.Fragment>
     </div>
   );

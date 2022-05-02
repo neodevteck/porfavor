@@ -25,7 +25,7 @@ export default function EncabezadoCalendario() {
   }
   return (
     <React.Fragment>
-<header className="px-4 py-2 flex items-center">     
+<header className="px-4 py-2 flex items-center sticky">     
       <h1 className="mr-10 text-xl text-gray-500 fond-bold">
         Calendario
       </h1>

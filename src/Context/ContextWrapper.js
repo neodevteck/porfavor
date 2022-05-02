@@ -24,12 +24,13 @@ import React, {
       }
     }, [smallCalendarMonth]);   
 
-    const filtrarActividades = useMemo(() => {      
+    const filtrarActividades = useMemo(() => {     
+      console.log('filtro') 
       return ActividadesMes ? ActividadesMes.filter((evt) =>
         usuarios
           .filter((lbl) => lbl.checked)
           .map((lbl) => lbl.id)
-          .includes(evt.TERCERECURSOCTROLID_FLUJOTRABAJO )
+          .includes(evt.TERCERECURSOCTROLID )
       ):[]
     }, [ActividadesMes, usuarios]);
 

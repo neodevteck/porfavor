@@ -8,7 +8,6 @@ export default function Usuarios() {
       <p className='text-gray-500 font-bold mt-10'>Usuarios</p>
       {usuarios.map(({ id, checked, nombre, num }, idx) => (
         <label key={idx} className='items-center mt-3 block'>
-          {console.log(usuarios)}
           <input
             type='checkbox'
             checked={checked}

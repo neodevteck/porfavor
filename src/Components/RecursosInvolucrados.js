@@ -15,12 +15,12 @@ const RecursosInvolucrados = ({ evt, colores, usuarios }) => {
     <>
       <div
         className={`h-3 w-3 ${ObtenerColorUsuario(
-          evt.TERCERECURSOCTROLID_FLUJOTRABAJO || -1
+          evt.TERCERECURSOCTROLID || -1
         )} rounded-full inline-block`}
       ></div>
       <div
         className={`h-3 w-3 ${ObtenerColorUsuario(
-          evt.TERCERECURSOCTROL2ID_FLUJOTRABAJO || 1
+          evt.TERCERECURSOCTROL2ID || 1
         )} rounded-full inline-block`}
       ></div>
     </>
