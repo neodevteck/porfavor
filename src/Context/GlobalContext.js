@@ -17,8 +17,7 @@ const GlobalContext = React.createContext({
   usuarios: [],
   setUsuarios: () => {}, 
   ActividadesMes:[],
-  setActividadesMes:() => {},
-  filtrarActividades: ()=>{},
+  setActividadesMes:() => {},  
   colores: []
 });
 

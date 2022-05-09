@@ -51,7 +51,7 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
   } = useContext(GlobalContext);
   //console.log(usuarios);
   useEffect(() => {
-    console.log(filtrarActividades)
+    //console.log(filtrarActividades)
 
     // const events =
     // ActividadesMes?
@@ -184,8 +184,10 @@ export default function Dia({ day, rowIdx, idUsuDia }) {
 
   function ObtenerColorUsuario(evt) {
     //console.log(evt.TERCERECURSOCTROLID);
-    for (let i = 0; i < usuarios.length; i++) {
+    //console.log(usuarios)
+    for (let i = 0; i < usuarios.length; i++) {     
       if (
+        
         usuarios[i].id === evt.TERCERECURSOCTROLID ||
         usuarios[i].id === evt.TERCERECURSOCTROL2ID ||
         usuarios[i].id === evt.TERCERECURSOCTROL3ID ||
