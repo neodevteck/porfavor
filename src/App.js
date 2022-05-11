@@ -9,14 +9,12 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import useActividades from './query-hooks/useActividades';
 import Spinner from './Components/Spinner';
-// import DetalleDia from './Components/DetalleDia';
-//  let actividades = require('./Const/Actividades');
-//  let usuario = require('./Const/Usuario');
+
 
 function App() {
-  console.log('APP');
+  //console.log('APP');
   const [currenMonth, setCurrentMonth] = useState(getMonth());
-  //console.log(currenMonth)
+  console.log(currenMonth)
   const {
     dayIndex,
     monthIndex,
@@ -29,22 +27,22 @@ function App() {
     colores
   } = useContext(GlobalContext);  
   useEffect(() => {
-    setCurrentMonth(monthIndex)
+    setCurrentMonth(getMonth(monthIndex))
   }, [monthIndex])
   //let data = []
   //console.log(usuarios)
   let arrIds = usuarios.map(x => x.id)
   let fechaIni = dayjs(getMonth(monthIndex)[0][0]).format("DD-MM-YY").toString()
   let fechaFin = dayjs(getMonth(monthIndex)[4][6]).format("DD-MM-YY").toString()
-  let opcVista = opcionVista
+  //let opcVista = opcionVista
 
-  console.log(arrIds)
-  console.log(fechaIni)
-  console.log(fechaFin)
-  console.log(opcVista)
+  // console.log(arrIds)
+  // console.log(fechaIni)
+  // console.log(fechaFin)
+  // console.log(opcVista)
 
-
-  const {data,status} = useActividades(fechaIni,fechaFin,arrIds ? arrIds : [],opcVista)
+  //console.log('WTF')
+  const {data,status} = useActividades(fechaIni,fechaFin,arrIds ? arrIds : [],opcionVista)
 
   if (status === 'loading'){
     return <Spinner />
@@ -87,13 +85,13 @@ function App() {
 
   return (
     <React.Fragment>
-      {/* <div className='h-screen flex flex-col'>
+      <div className='h-screen flex flex-col'>
         <EncabezadoCalendario />
         <div className='flex flex-1'>
           <Sidebar />
 
           {opcionVista == 1 ? (
-            <Mes mes={currenMonth}  />
+            <Mes currenMonth={currenMonth} data={data} />
           ) : (
             usuarios
               .filter((lbl) => lbl.checked)
@@ -109,7 +107,7 @@ function App() {
               ))
           )}
         </div>
-      </div> */}
+      </div>
     </React.Fragment>
   );
 }

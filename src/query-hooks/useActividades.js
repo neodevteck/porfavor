@@ -23,6 +23,6 @@ export const fetchActividades = (
     // .get('http://localhost:3003/actividades')
     .then((res) => res.data);
 
-export default function useActividades() {
-  return useQuery(['actividades'], fetchActividades);
+export default function useActividades(FechaInicial,FechaFinal,ArrIds,OpcionVista) {
+  return useQuery(['actividades'],() => fetchActividades(FechaInicial,FechaFinal,ArrIds,OpcionVista));
 }

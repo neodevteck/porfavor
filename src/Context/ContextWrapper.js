@@ -4,7 +4,6 @@ import React, {
   import GlobalContext from "./GlobalContext";
   import dayjs from "dayjs"; 
   import axios from 'axios'
-  //let usuario = require('../Const/Usuario');
 
   export default function ContextWrapper(props) {
     const [monthIndex, setMonthIndex] = useState(dayjs().locale("es").month());

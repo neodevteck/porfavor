@@ -4,7 +4,7 @@ import GlobalContext from '../Context/GlobalContext';
 import {debounce} from '../Util/Util'
 import Spinner from '../Components/Spinner'
 
-let usuariosBusqueda = require('../Const/Usuarios');
+
 
 export default function BarraBusquedaUsu() {
   //const [textoBusqueda,setTextoBusqueda] = useState('')
@@ -44,34 +44,34 @@ export default function BarraBusquedaUsu() {
       //setTextoBusqueda(e.target.value);   
       console.log(e.target.value)
      if (e.target.value !== '') {    
-      setListaCoincidencias(usuariosBusqueda)
-      // setCargando(true);
-      // axios
-      //   //.post(
-      //   .get(
-      //     'http://localhost:3003/usuarios',
-      //     'frmCalendarioV2.aspx/ObtenerLisUsuariosxFiltro',
-      //     { prefixText: e.target.value },
-      //     {
-      //       headers: { 'Content-Type': 'application/json' },
-      //     }
-      //   )
-      //   .then((res) => {
-      //     console.log(res);
-      //     if (res.status === 200) {
-      //       if (res.data.d !== undefined) {
-      //         console.log(res.data.d);
-      //         setListaCoincidencias(res.data.d)
-      //         //document.querySelector('#txtBusqueda').value = e.target.value;
-      //       }
-      //     }
-      //   })
-      //   .catch(() => {
-      //     setError(true);
-      //   })
-      //   .then(() => {
-      //     setCargando(false);
-      //   });
+      //setListaCoincidencias(usuariosBusqueda)
+      setCargando(true);
+      axios
+        .post(
+        //.get(
+          //'http://localhost:3003/usuarios',
+          'frmCalendarioV2.aspx/ObtenerLisUsuariosxFiltro',
+          { prefixText: e.target.value },
+          {
+            headers: { 'Content-Type': 'application/json' },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            if (res.data.d !== undefined) {
+              console.log(res.data.d);
+              setListaCoincidencias(res.data.d)
+              //document.querySelector('#txtBusqueda').value = e.target.value;
+            }
+          }
+        })
+        .catch(() => {
+          setError(true);
+        })
+        .then(() => {
+          setCargando(false);
+        });
     } 
     else {
       setListaCoincidencias([]);
